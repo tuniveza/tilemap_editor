@@ -1,0 +1,108 @@
+.special-elite-regular {
+  font-family: "Special Elite", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: system-ui;
+  color: rgb(210, 123, 123);
+  text-shadow: 0px 0px 4px pink;
+  font-weight: bold;
+  background-color: #e38b81;
+
+  background-image:
+    linear-gradient(135deg, #f4a2a2 25%, transparent 35%),
+    linear-gradient(225deg, #ed9494 25%, transparent 45%),
+    linear-gradient(45deg, #f28d8d 25%, transparent 55%),
+    linear-gradient(315deg, #c57575 25%, #ee8c8c 35%);
+  background-position:
+    32px 0,
+    32px 0,
+    0 0,
+    0 0;
+  background-size: 8px 8px;
+  background-repeat: repeat;
+}
+
+.toolbar {
+  background: linear-gradient(rgb(234, 156, 156), rgb(234, 186, 186));
+  display: flex;
+  place-items: center;
+  text-align: center;
+  margin: 0 auto;
+  width: fit-content;
+  height: fit-content;
+  border: 8px double rgb(221, 129, 129);
+  border-radius: 16% 24% 16% 20%;
+  padding: 0.2%;
+  transform: translate(0px, 8px);
+  filter: drop-shadow(0px 0px 4px rgb(195, 136, 136));
+}
+
+.button {
+  display: flex;
+  place-items: center;
+  background: linear-gradient(rgb(224, 155, 155), rgb(238, 182, 182));
+  margin: 0.4vh;
+  padding: 0.4vw;
+  border-radius: 8% 32% 8% 32%;
+  border: 6px double rgb(224, 133, 133);
+}
+
+.button:hover {
+  background: linear-gradient(rgb(237, 166, 142), rgb(244, 209, 188));
+  cursor: grab;
+}
+
+#draw_canvas {
+  background: purple;
+  transform: translateY(84px);
+}
+
+#picker_canvas {
+  image-rendering: pixelated;
+  background: rgb(42, 29, 29);
+  transform: translateY(84px);
+}
+
+.modebar {
+  display: flex;
+
+  background: linear-gradient(rgb(242, 135, 135), rgb(201, 135, 135));
+  display: flex;
+  place-items: center;
+  text-align: center;
+  margin: 0 auto;
+  width: fit-content;
+  height: fit-content;
+  border: 8px double rgb(221, 129, 129);
+  border-radius: 16% 24% 16% 20%;
+  padding: 0.2%;
+
+  position: absolute;
+  transform: translate(0px, 80px);
+  z-index: 100;
+}
+
+.modebar > .button {
+  background: linear-gradient(rgb(208, 103, 103), rgb(212, 139, 139));
+  color: rgb(153, 94, 104);
+}
+
+.modebar > .button:hover {
+  background: linear-gradient(rgb(235, 116, 116), rgb(224, 131, 131));
+  color: white;
+}
+
+.app {
+  display: flex;
+  place-items: center;
+  flex-direction: column;
+}
