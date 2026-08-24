@@ -31,6 +31,12 @@ body {
   background-repeat: repeat;
 }
 
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .toolbar {
   background: linear-gradient(rgb(234, 156, 156), rgb(234, 186, 186));
   display: flex;
@@ -61,16 +67,39 @@ body {
   cursor: grab;
 }
 
+.canvas-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas-frame::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  padding: 4px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, gold, orangered, rgb(221, 129, 129));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
 #draw_canvas {
   background: purple;
-  transform: translateY(84px);
 }
 
 .picker-row {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  transform: translateY(84px);
 }
 
 #picker_canvas {
@@ -79,13 +108,22 @@ body {
 }
 
 .tile-dictionary {
+  position: absolute;
+  top: -90%;
+  right: 102%;
+  margin-left: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   background: linear-gradient(rgb(234, 156, 156), rgb(234, 186, 186));
   border: 8px double rgb(221, 129, 129);
   border-radius: 16% 8% 16% 8% / 8% 16% 8% 16%;
   filter: drop-shadow(0px 0px 4px rgb(195, 136, 136));
   box-sizing: border-box;
-  width: 160px;
-  max-height: 400px;
+  width: auto;
+  max-height: auto;
   padding: 8px;
   overflow-y: auto;
 }
@@ -138,7 +176,9 @@ body {
   padding: 0.2%;
 
   position: absolute;
-  transform: translate(0px, 80px);
+  top: 96px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 100;
 }
 
@@ -159,7 +199,15 @@ body {
   box-shadow: 0 0 6px 2px gold;
 }
 
+.canvas_stage {
+  display: flex;
+  place-items: center;
+  flex-direction: column;
+  margin-top: 84px;
+}
+
 .app {
+  position: relative;
   display: flex;
   place-items: center;
   flex-direction: column;
