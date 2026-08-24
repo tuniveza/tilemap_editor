@@ -10,8 +10,8 @@
   <body>
     <div class="app">
       <div class="modebar">
-        <div class="button">Pick</div>
-        <div class="button">Draw</div>
+        <div id="pick-mode-btn" class="button">Pick</div>
+        <div id="draw-mode-btn" class="button">Draw</div>
       </div>
       <div class="toolbar">
         <div class="button">Start ~ TileMap</div>
@@ -20,7 +20,13 @@
         <div class="button">TileMap ~ Finish</div>
       </div>
       <canvas id="draw_canvas"></canvas>
-      <canvas id="picker_canvas"></canvas>
+      <div class="picker-row">
+        <canvas id="picker_canvas"></canvas>
+        <div class="tile-dictionary">
+          <div class="tile-dictionary-title">Tile Dictionary</div>
+          <div id="tile-dictionary-list" class="tile-dictionary-list"></div>
+        </div>
+      </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
