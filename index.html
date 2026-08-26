@@ -8,27 +8,74 @@
     <title>tilemap_editor</title>
   </head>
   <body>
+    <div class="sidebar">
+      <div class="toolbar">
+        <div class="button">Start TileMap</div>
+        <div class="button">Import TileMap</div>
+        <select id="export-language" class="export-select">
+          <option value="lua">Lua</option>
+          <option value="c">C</option>
+          <option value="ruby">Ruby</option>
+          <option value="csharp">C#</option>
+        </select>
+        <div id="export-btn" class="button">Export TileMap</div>
+        <div id="grid-toggle-btn" class="button" title="Toggle grid lines">
+          Grid: Off
+        </div>
+        <div class="button">TileMap Finish</div>
+      </div>
+      <div class="tile-dictionary">
+        <div class="tile-dictionary-title">Tile Dictionary</div>
+        <div id="tile-dictionary-list" class="tile-dictionary-list"></div>
+      </div>
+    </div>
     <div class="app">
       <div class="modebar">
         <div id="pick-mode-btn" class="button">Pick</div>
         <div id="draw-mode-btn" class="button">Draw</div>
       </div>
-      <div class="toolbar">
-        <div class="button">Start TileMap</div>
-        <div class="button">Import TileMap</div>
-        <div class="button">Export TileMap</div>
-        <div class="button">TileMap Finish</div>
-      </div>
       <div class="canvas_stage">
         <div class="canvas-frame">
           <canvas id="draw_canvas"></canvas>
-          <div class="picker-row">
-            <canvas id="picker_canvas"></canvas>
-            <div class="tile-dictionary">
-              <div class="tile-dictionary-title">Tile Dictionary</div>
-              <div id="tile-dictionary-list" class="tile-dictionary-list"></div>
+          <canvas id="picker_canvas"></canvas>
+          <div id="draw-zoom-controls" class="zoom-controls">
+            <div class="zoom-btn" id="draw-zoom-out" title="Zoom out">−</div>
+            <div class="zoom-btn" id="draw-zoom-reset" title="Reset zoom">
+              ⟲
             </div>
+            <div class="zoom-btn" id="draw-zoom-in" title="Zoom in">+</div>
           </div>
+          <div id="picker-zoom-controls" class="zoom-controls">
+            <div class="zoom-btn" id="picker-zoom-out" title="Zoom out">−</div>
+            <div class="zoom-btn" id="picker-zoom-reset" title="Reset zoom">
+              ⟲
+            </div>
+            <div class="zoom-btn" id="picker-zoom-in" title="Zoom in">+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="status-bar" class="status-bar">
+      <span id="status-dict-count">Dictionary: 0 tiles</span>
+      <span id="status-drawn-count">Drawn: 0 tiles</span>
+      <span id="status-selected">Selected: none</span>
+      <span id="status-last-selected">Last: none</span>
+    </div>
+    <div id="export-modal" class="export-modal hidden">
+      <div class="export-modal-panel">
+        <div class="export-modal-header">
+          <span>Exported TileMap &mdash; <span id="export-modal-lang"></span></span>
+          <div id="export-modal-close" class="button">Close</div>
+        </div>
+        <textarea
+          id="export-output"
+          class="export-output"
+          readonly
+          spellcheck="false"
+        ></textarea>
+        <div class="export-modal-actions">
+          <div id="export-copy-btn" class="button">Copy</div>
+          <div id="export-download-btn" class="button">Download</div>
         </div>
       </div>
     </div>

@@ -37,24 +37,36 @@ body {
   justify-content: center;
 }
 
+.sidebar {
+  position: fixed;
+  /* top/left are set from JS, positioned relative to the canvas so it stays
+     centered alongside it instead of pinned to the page corner. */
+  width: 190px;
+  box-sizing: border-box;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 200;
+}
+
 .toolbar {
   background: linear-gradient(rgb(234, 156, 156), rgb(234, 186, 186));
   display: flex;
-  place-items: center;
+  flex-direction: column;
+  align-items: stretch;
   text-align: center;
-  margin: 0 auto;
-  width: fit-content;
-  height: fit-content;
   border: 8px double rgb(221, 129, 129);
-  border-radius: 16% 24% 16% 20%;
-  padding: 0.2%;
-  transform: translate(0px, 8px);
+  border-radius: 6%;
+  padding: 8px;
   filter: drop-shadow(0px 0px 4px rgb(195, 136, 136));
 }
 
 .button {
   display: flex;
-  place-items: center;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   background: linear-gradient(rgb(224, 155, 155), rgb(238, 182, 182));
   margin: 0.4vh;
   padding: 0.4vw;
@@ -67,10 +79,94 @@ body {
   cursor: grab;
 }
 
-.canvas-frame {
-  position: relative;
+.button.grid-active {
+  background: linear-gradient(rgb(255, 205, 105), rgb(240, 170, 90));
+  color: rgb(90, 50, 20);
+  border-color: gold;
+  box-shadow: 0 0 6px 2px gold;
+}
+
+.export-select {
+  display: block;
+  text-align: center;
+  text-align-last: center;
+  background: linear-gradient(rgb(224, 155, 155), rgb(238, 182, 182));
+  margin: 0.4vh;
+  padding: 0.4vw;
+  border-radius: 8% 32% 8% 32%;
+  border: 6px double rgb(224, 133, 133);
+  color: inherit;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.export-select:hover {
+  background: linear-gradient(rgb(237, 166, 142), rgb(244, 209, 188));
+}
+
+.export-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(60, 20, 20, 0.55);
+  z-index: 1000;
+}
+
+.export-modal.hidden {
+  display: none;
+}
+
+.export-modal-panel {
+  background: linear-gradient(rgb(234, 156, 156), rgb(234, 186, 186));
+  border: 8px double rgb(221, 129, 129);
+  border-radius: 4%;
+  filter: drop-shadow(0px 0px 6px rgb(195, 136, 136));
+  box-sizing: border-box;
+  padding: 16px;
+  width: min(640px, 90vw);
+  max-height: 80vh;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+
+.export-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.export-output {
+  flex: 1;
+  min-height: 300px;
+  resize: vertical;
+  font-family: "Courier New", monospace;
+  font-size: 0.8rem;
+  font-weight: normal;
+  text-shadow: none;
+  color: rgb(90, 50, 20);
+  background: rgb(250, 235, 225);
+  border: 4px double rgb(224, 133, 129);
+  border-radius: 4px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.export-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.canvas-frame {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  filter: drop-shadow(0 6px 14px rgba(60, 20, 20, 0.45));
 }
 
 .canvas-frame::before {
@@ -93,39 +189,72 @@ body {
 
 #draw_canvas {
   background: purple;
-}
-
-.picker-row {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  image-rendering: pixelated;
+  touch-action: none;
+  border-radius: 12px 12px 0 0;
 }
 
 #picker_canvas {
   image-rendering: pixelated;
   background: rgb(42, 29, 29);
+  touch-action: none;
+  border-radius: 0 0 12px 12px;
+}
+
+.zoom-controls {
+  position: absolute;
+  z-index: 50;
+  display: flex;
+  gap: 2px;
+  background: linear-gradient(rgb(234, 156, 156), rgb(234, 186, 186));
+  border: 3px double rgb(221, 129, 129);
+  border-radius: 40%;
+  padding: 2px;
+  filter: drop-shadow(0px 0px 3px rgb(195, 136, 136));
+}
+
+#draw-zoom-controls {
+  top: 8px;
+  right: 8px;
+}
+
+#picker-zoom-controls {
+  bottom: 8px;
+  right: 8px;
+}
+
+.zoom-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  line-height: 1;
+  font-size: 14px;
+  font-weight: bold;
+  color: rgb(153, 94, 104);
+  background: linear-gradient(rgb(224, 155, 155), rgb(238, 182, 182));
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+}
+
+.zoom-btn:hover {
+  background: linear-gradient(rgb(237, 166, 142), rgb(244, 209, 188));
+  color: white;
 }
 
 .tile-dictionary {
-  position: absolute;
-  top: -90%;
-  right: 102%;
-  margin-left: 12px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 
   background: linear-gradient(rgb(234, 156, 156), rgb(234, 186, 186));
   border: 8px double rgb(221, 129, 129);
-  border-radius: 16% 8% 16% 8% / 8% 16% 8% 16%;
+  border-radius: 6%;
   filter: drop-shadow(0px 0px 4px rgb(195, 136, 136));
   box-sizing: border-box;
-  width: auto;
-  max-height: auto;
   padding: 8px;
-  overflow-y: auto;
 }
 
 .tile-dictionary-title {
@@ -137,19 +266,48 @@ body {
 
 .tile-dictionary-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 32px);
   gap: 4px;
+  max-height: 152px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(221, 129, 129) transparent;
+}
+
+.tile-dictionary-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tile-dictionary-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tile-dictionary-list::-webkit-scrollbar-thumb {
+  background: rgb(221, 129, 129);
+  border-radius: 4px;
 }
 
 .tile-swatch {
-  image-rendering: pixelated;
-  background: rgb(42, 29, 29);
+  position: relative;
+  width: 32px;
+  height: 32px;
   border: 3px double rgb(224, 133, 133);
   border-radius: 20%;
   cursor: pointer;
+  overflow: hidden;
   transition:
     box-shadow 0.15s ease,
     border-color 0.15s ease;
+}
+
+.tile-swatch canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  background: rgb(42, 29, 29);
 }
 
 .tile-swatch:hover {
@@ -161,54 +319,100 @@ body {
   box-shadow: 0 0 6px 2px gold;
 }
 
+/* Number badges hint at the 1-4 hotkeys for the currently active row,
+   set dynamically in JS as the mouse wheel pages through the dictionary. */
+.tile-swatch[data-badge]::after {
+  content: attr(data-badge);
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  min-width: 12px;
+  height: 12px;
+  padding: 0 2px;
+  border-radius: 50%;
+  background: gold;
+  color: rgb(90, 50, 20);
+  font-size: 9px;
+  font-weight: bold;
+  line-height: 12px;
+  text-align: center;
+  pointer-events: none;
+}
+
 .modebar {
+  grid-area: modebar;
   display: flex;
 
-  background: linear-gradient(rgb(242, 135, 135), rgb(201, 135, 135));
-  display: flex;
-  place-items: center;
-  text-align: center;
+  background: rgba(234, 156, 156, 0.5);
   margin: 0 auto;
   width: fit-content;
   height: fit-content;
-  border: 8px double rgb(221, 129, 129);
-  border-radius: 16% 24% 16% 20%;
-  padding: 0.2%;
+  border: 1px solid rgba(221, 129, 129, 0.7);
+  border-radius: 999px;
+  padding: 2px;
 
-  position: absolute;
-  top: 96px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
   z-index: 100;
 }
 
 .modebar > .button {
-  background: linear-gradient(rgb(208, 103, 103), rgb(212, 139, 139));
+  background: transparent;
   color: rgb(153, 94, 104);
+  height: fit-content;
+  margin: 0;
+  padding: 3px 14px;
+  font-size: 0.68rem;
+  line-height: 1;
+  border: none;
+  border-radius: 999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.15s ease;
 }
 
 .modebar > .button:hover {
-  background: linear-gradient(rgb(235, 116, 116), rgb(224, 131, 131));
-  color: white;
+  background: rgba(224, 133, 133, 0.3);
+  color: rgb(153, 94, 104);
 }
 
 .modebar > .button.active {
   background: linear-gradient(rgb(255, 205, 105), rgb(240, 170, 90));
   color: rgb(90, 50, 20);
-  border-color: gold;
-  box-shadow: 0 0 6px 2px gold;
+  box-shadow: 0 0 4px 1px rgba(255, 215, 0, 0.6);
 }
 
 .canvas_stage {
-  display: flex;
-  place-items: center;
-  flex-direction: column;
-  margin-top: 84px;
+  grid-area: canvas_stage;
 }
 
 .app {
   position: relative;
+  display: grid;
+  grid-template-areas:
+    "modebar"
+    "canvas_stage";
+  justify-items: center;
+  row-gap: 12px;
+  transform-origin: center center;
+}
+
+.status-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 300;
   display: flex;
-  place-items: center;
-  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 6px 12px;
+  box-sizing: border-box;
+  background: linear-gradient(rgb(201, 135, 135), rgb(242, 135, 135));
+  border-top: 3px double rgb(221, 129, 129);
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: rgb(153, 94, 104);
+  text-shadow: none;
 }
