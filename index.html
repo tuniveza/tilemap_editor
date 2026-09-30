@@ -17,7 +17,29 @@
           <option value="c">C</option>
           <option value="ruby">Ruby</option>
           <option value="csharp">C#</option>
+          <option value="typescript">TypeScript</option>
+          <option value="custom">Custom brackets</option>
         </select>
+        <div id="custom-brackets" class="custom-brackets hidden">
+          <input
+            id="custom-bracket-open"
+            class="custom-bracket-input"
+            type="text"
+            value="["
+            maxlength="8"
+            title="Opening bracket"
+            spellcheck="false"
+          />
+          <input
+            id="custom-bracket-close"
+            class="custom-bracket-input"
+            type="text"
+            value="]"
+            maxlength="8"
+            title="Closing bracket"
+            spellcheck="false"
+          />
+        </div>
         <div id="export-btn" class="button">Export TileMap</div>
         <div id="grid-toggle-btn" class="button" title="Toggle grid lines">
           Grid: Off

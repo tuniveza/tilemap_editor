@@ -899,7 +899,8 @@ window.addEventListener("resize", scheduleFitAppToWindow);
   }
 
   // ----- Export -----
-  type ExportLanguage = "lua" | "c" | "ruby" | "csharp";
+  type ExportLanguage =
+    "lua" | "c" | "ruby" | "csharp" | "typescript" | "custom";
 
   function sortedDictionary(): Tile[] {
     return [...keyDictionary.values()].sort((a, b) => a.id - b.id);
@@ -1020,6 +1021,58 @@ window.addEventListener("resize", scheduleFitAppToWindow);
     ].join("\n");
   }
 
+  function generateTypeScript(): string {
+    const dictLines = sortedDictionary()
+      .map(
+        (t) =>
+          `  ${t.id}: { col: ${t.col}, row: ${t.row}, x: ${t.x}, y: ${t.y} },`,
+      )
+      .join("\n");
+    const gridLines = buildTilemapGrid()
+      .map((row) => `  [${row.join(", ")}],`)
+      .join("\n");
+
+    return [
+      "// Tile dictionary: tile id -> position in the source tileset",
+      "export interface TileInfo { col: number; row: number; x: number; y: number }",
+      "",
+      "export const tileDictionary: Record<number, TileInfo> = {",
+      dictLines,
+      "};",
+      "",
+      `// Tilemap: rows of tile ids, ${EMPTY_TILE_ID} = empty`,
+      "export const tilemap: number[][] = [",
+      gridLines,
+      "];",
+    ].join("\n");
+  }
+
+  // Language-agnostic export where every array (the outer lists and each
+  // row) is wrapped in whatever brackets the user typed in the sidebar.
+  // Dictionary entries are written as [id, col, row, x, y] rows.
+  function generateCustom(): string {
+    const open = customOpenInput.value || "[";
+    const close = customCloseInput.value || "]";
+    const dictLines = sortedDictionary()
+      .map(
+        (t) => `  ${open}${t.id}, ${t.col}, ${t.row}, ${t.x}, ${t.y}${close},`,
+      )
+      .join("\n");
+    const gridLines = buildTilemapGrid()
+      .map((row) => `  ${open}${row.join(", ")}${close},`)
+      .join("\n");
+
+    return [
+      `tileDictionary = ${open}`,
+      dictLines,
+      close,
+      "",
+      `tilemap = ${open}`,
+      gridLines,
+      close,
+    ].join("\n");
+  }
+
   const EXPORT_CONFIG: Record<
     ExportLanguage,
     { label: string; extension: string; generate: () => string }
@@ -1028,12 +1081,41 @@ window.addEventListener("resize", scheduleFitAppToWindow);
     c: { label: "C", extension: "c", generate: generateC },
     ruby: { label: "Ruby", extension: "rb", generate: generateRuby },
     csharp: { label: "C#", extension: "cs", generate: generateCSharp },
+    typescript: {
+      label: "TypeScript",
+      extension: "ts",
+      generate: generateTypeScript,
+    },
+    custom: {
+      label: "Custom brackets",
+      extension: "txt",
+      generate: generateCustom,
+    },
   };
 
   const exportBtn = document.getElementById("export-btn")!;
   const exportLanguageSelect = document.getElementById(
     "export-language",
   ) as HTMLSelectElement;
+  const customBracketsRow = document.getElementById("custom-brackets")!;
+  const customOpenInput = document.getElementById(
+    "custom-bracket-open",
+  ) as HTMLInputElement;
+  const customCloseInput = document.getElementById(
+    "custom-bracket-close",
+  ) as HTMLInputElement;
+
+  function updateCustomBracketsVisibility() {
+    customBracketsRow.classList.toggle(
+      "hidden",
+      exportLanguageSelect.value !== "custom",
+    );
+  }
+  exportLanguageSelect.addEventListener(
+    "change",
+    updateCustomBracketsVisibility,
+  );
+  updateCustomBracketsVisibility();
   const exportModal = document.getElementById("export-modal")!;
   const exportModalLang = document.getElementById("export-modal-lang")!;
   const exportOutput = document.getElementById(

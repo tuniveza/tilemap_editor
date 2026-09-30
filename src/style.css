@@ -105,6 +105,30 @@ body {
   background: linear-gradient(rgb(237, 166, 142), rgb(244, 209, 188));
 }
 
+.custom-brackets {
+  display: flex;
+  gap: 0.4vw;
+  margin: 0.4vh;
+}
+
+.custom-brackets.hidden {
+  display: none;
+}
+
+.custom-bracket-input {
+  width: 50%;
+  min-width: 0;
+  box-sizing: border-box;
+  text-align: center;
+  background: linear-gradient(rgb(224, 155, 155), rgb(238, 182, 182));
+  padding: 0.4vw;
+  border-radius: 8% 32% 8% 32%;
+  border: 6px double rgb(224, 133, 133);
+  color: inherit;
+  font: inherit;
+  font-weight: bold;
+}
+
 .export-modal {
   position: fixed;
   inset: 0;
