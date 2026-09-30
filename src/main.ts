@@ -1021,30 +1021,13 @@ window.addEventListener("resize", scheduleFitAppToWindow);
     ].join("\n");
   }
 
+  // Just the tilemap as a plain nested array, ready to paste into a .ts file.
   function generateTypeScript(): string {
-    const dictLines = sortedDictionary()
-      .map(
-        (t) =>
-          `  ${t.id}: { col: ${t.col}, row: ${t.row}, x: ${t.x}, y: ${t.y} },`,
-      )
-      .join("\n");
     const gridLines = buildTilemapGrid()
       .map((row) => `  [${row.join(", ")}],`)
       .join("\n");
 
-    return [
-      "// Tile dictionary: tile id -> position in the source tileset",
-      "export interface TileInfo { col: number; row: number; x: number; y: number }",
-      "",
-      "export const tileDictionary: Record<number, TileInfo> = {",
-      dictLines,
-      "};",
-      "",
-      `// Tilemap: rows of tile ids, ${EMPTY_TILE_ID} = empty`,
-      "export const tilemap: number[][] = [",
-      gridLines,
-      "];",
-    ].join("\n");
+    return ["const map = [", gridLines, "];"].join("\n");
   }
 
   // Language-agnostic export where every array (the outer lists and each
